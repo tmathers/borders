@@ -1,4 +1,4 @@
-import { Group } from '@mantine/core';
+import { Card, Group, Text } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import CountryMap from '../CountryMap';
 import { IconCheck, IconX } from '@tabler/icons-react';
@@ -13,7 +13,6 @@ const DATA_URL = '/data/countries_simplified.geojson'
  * TODO:
  *  - use other map option to hide labels
  *  - end game state
- *  - display total
  *  - center on country
  *  - header
  *  - color mode
@@ -59,22 +58,14 @@ export function Welcome() {
           .sort()
 
         setALL_COUNTRIES(countries)
-
         const set = new Set([...countries])
-
         pickCountry(set)
-
         setUnusedCountries(set)
 
       })
       .catch(e => console.error('load error', e));
 
   }, [DATA_URL]);
-
-  useEffect(() => {
-
-    pickCountry(unusedCountries)
-  }, [])
 
   const submit = (selectedCountry: string) => {
 
@@ -87,9 +78,10 @@ export function Welcome() {
     notifications.show({
       position: 'top-center',
       withCloseButton: true,
+      withBorder: true,
       autoClose: 5000,
-      title: correct ? 'Correct!' : 'Incorrect',
-      message: <p>The country was <b>{country}</b>.</p>,
+      title: <b>{correct ? 'Correct!' : 'Incorrect!'}</b>,
+      message: <>The country was <b>{country}</b>.</>,
       color: correct ? 'green' : 'red',
       icon: correct ? <IconCheck /> : <IconX />,
     });
@@ -100,7 +92,16 @@ export function Welcome() {
 
   return (
     <>
-
+      <Card 
+        pos="absolute" 
+        right={0}
+        m="lg"
+        p="sm" 
+        style={{ zIndex: 999 }}
+        withBorder  
+      >
+        <Text size="lg">{totalCorrect} / {totalAsked}</Text>
+      </Card>
       
       <Group h="100%" w="100%" id="map">
         {country && 

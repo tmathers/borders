@@ -7,9 +7,10 @@ interface CountryMapProps {
   geoJson?: Geometry;
 }
 
-const HIGHLIGHT_STYLE = { color: 'blue', weight: 2, fillColor: 'blue', fillOpacity: 1 }
+const HIGHLIGHT_STYLE = { color: 'blue', weight: 3, fillColor: 'blue', fillOpacity: 1 }
+const REGULAR_STYLE = { color: '#ccc', weight: 1, fillColor: '#eee', fillOpacity: 1 }
 
-const REGULAR_STYLE = { color: '#ccc', weight: 0.5, fillColor: '#eee', fillOpacity: 1 }
+const MAP_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
 const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
 
@@ -29,7 +30,7 @@ const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
 
   return (
     <MapContainer center={[20,0]} zoom={2} style={{ height: '600px', width: '100%' }}>
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <TileLayer url={MAP_URL} />
       {geoJson &&
         <GeoJSON data={geoJson} style={styleFn} onEachFeature={onEachFeature} />
       }

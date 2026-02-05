@@ -1,6 +1,6 @@
 import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
-import { useState } from 'react';
+import { ChangeEvent, KeyboardEventHandler, useState } from 'react';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 
@@ -39,11 +39,18 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
         />}
         value={value}
         onChange={v => setValue(v)}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter' && ALL_COUNTRIES.includes(value)) {
+            onSubmit(value)
+            setValue('')
+          }
+        }}
       />
       
       <ActionIcon 
         variant="filled" 
         aria-label="Submit" 
+        disabled={!ALL_COUNTRIES.includes(value)}
         h={INPUT_HEIGHT} 
         w={INPUT_HEIGHT} 
         onClick={() => {
