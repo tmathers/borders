@@ -1,0 +1,58 @@
+import { ActionIcon, Autocomplete, Button, Flex, Group, useMantineColorScheme } from '@mantine/core';
+import { IconX, IconArrowRight } from '@tabler/icons-react';
+import { useState } from 'react';
+
+interface CountryInputProps {
+  readonly ALL_COUNTRIES: string[], 
+  readonly onSubmit: (v: string) => void
+}
+
+const INPUT_HEIGHT = 34
+
+export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
+
+  const [value, setValue] = useState('')
+
+  return (
+    <Flex 
+      style={{ zIndex: 999 }}
+      pos="absolute"
+      bottom={0}
+      w="100%"
+      justify="center"
+      align="flex-end"
+      gap="xs"
+      mb="xl"
+    >
+
+      <Autocomplete
+        styles={{ dropdown: { zIndex: 999 } }}
+        placeholder="Enter country"
+        data={ALL_COUNTRIES}
+        maxDropdownHeight={200}
+        h={INPUT_HEIGHT}
+        rightSection={<IconX 
+          height={INPUT_HEIGHT / 2} 
+          onClick={() => setValue('')}  
+          cursor="pointer"
+        />}
+        value={value}
+        onChange={v => setValue(v)}
+      />
+      
+      <ActionIcon 
+        variant="filled" 
+        aria-label="Submit" 
+        h={INPUT_HEIGHT} 
+        w={INPUT_HEIGHT} 
+        onClick={() => {
+          onSubmit(value)
+          setValue('')
+        }}
+      >
+        <IconArrowRight style={{ width: '70%', height: '70%' }} stroke={1.5} />
+      </ActionIcon>
+
+    </Flex>
+  );
+}

@@ -1,9 +1,25 @@
-import { Group, Text, Title } from '@mantine/core';
+import { ActionIcon, Autocomplete, Box, Flex, Group, Text, Title } from '@mantine/core';
 import classes from './Welcome.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CountryMap from '../CountryMap';
+import { IconArrowRight, IconCheck, IconCircleArrowRight, IconCircleArrowRightFilled, IconX } from '@tabler/icons-react';
+import { CountryInput } from '../CountryInput';
+import { notifications } from '@mantine/notifications';
 
 const DATA_URL = '/data/countries_simplified.geojson'
+
+
+/**
+ * TODO:
+ *  - use other map option to hide labels
+ *  - end game state
+ *  - display total
+ *  - center on country
+ *  - header
+ *  - color mode
+ *  - fix lint errors
+ */
+
 
 
 export function Welcome() {
@@ -12,17 +28,21 @@ export function Welcome() {
 
   const [geoJson, setGeojson] = useState()
 
-  const [ALL_COUNTRIES, setALL_COUNTRIES] = useState()
+  const [ALL_COUNTRIES, setALL_COUNTRIES] = useState([])
 
   const [unusedCountries, setUnusedCountries] = useState<Set<string>>(new Set())
+
+  const [totalCorrect, setTotalCorrect] = useState(0)
+
+  const totalAsked = useMemo(() => ALL_COUNTRIES.length - unusedCountries.size, [ALL_COUNTRIES, unusedCountries])
+
+
 
   const pickCountry = (countries: Set<string>) => {
     const idx = Math.floor(Math.random() * countries.size)
     const pick = [...countries][idx]
     setCountry(pick)
     unusedCountries.delete(pick)
-
-    console.log(unusedCountries, idx, pick)
   }
 
   useEffect(() => {
@@ -35,6 +55,7 @@ export function Welcome() {
         setGeojson(data)
 
         const countries = data.features.map((c: unknown) => c.properties.NAME)
+          .sort()
 
         setALL_COUNTRIES(countries)
 
@@ -44,33 +65,47 @@ export function Welcome() {
 
         setUnusedCountries(set)
 
-
       })
       .catch(e => console.error('load error', e));
 
   }, [DATA_URL]);
 
-  useState(() => {
+  useEffect(() => {
 
     pickCountry(unusedCountries)
   }, [])
 
+  const submit = (selectedCountry: string) => {
 
+    const correct = selectedCountry === country
+
+    if (correct) setTotalCorrect(totalCorrect + 1)
+
+    notifications.show({
+      position: 'top-center',
+      withCloseButton: true,
+      autoClose: 5000,
+      title: correct ? 'Correct!' : 'Incorrect',
+      message: <p>The country was <b>{country}</b>.</p>,
+      color: correct ? 'green' : 'red',
+      icon: correct ? <IconCheck /> : <IconX />,
+    });
+
+    pickCountry(unusedCountries)
+    setUnusedCountries(new Set<string>([...unusedCountries]))
+  }
 
   return (
     <>
-      <Title className={classes.title} ta="center" mt={100}>
-        Welcome to{' '}
-        <Text inherit variant="gradient" component="span" gradient={{ from: 'pink', to: 'yellow' }}>
-          Mantine
-        </Text>
-      </Title>
 
-      <Group h="20rem" w="100%" id="map">
+      
+      <Group h="100%" w="100%" id="map">
         {country && 
           <CountryMap country={country} geoJson={geoJson} />
         }
       </Group>
+
+      <CountryInput ALL_COUNTRIES={ALL_COUNTRIES} onSubmit={submit} />
 
     </>
   );
