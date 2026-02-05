@@ -1,4 +1,4 @@
-import { ActionIcon, Autocomplete, Button, Flex, Group, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useState } from 'react';
 
@@ -28,6 +28,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
       <Autocomplete
         styles={{ dropdown: { zIndex: 999 } }}
         placeholder="Enter country"
+        aria-label="Enter country"
         data={ALL_COUNTRIES}
         maxDropdownHeight={200}
         h={INPUT_HEIGHT}

@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import type { Geometry } from 'geojson'
 
 interface CountryMapProps {
   country: string;
-  geoJson?: JSON;
+  geoJson?: Geometry;
 }
 
-const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
-  const style = { color: 'blue', weight: 2, fillColor: 'blue', fillOpacity: 0.2 };
+const HIGHLIGHT_STYLE = { color: 'blue', weight: 2, fillColor: 'blue', fillOpacity: 1 }
 
+const REGULAR_STYLE = { color: '#ccc', weight: 0.5, fillColor: '#eee', fillOpacity: 1 }
+
+const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
 
   const styleFn = (feature: any) => {
     return feature?.properties?.NAME === country
-      ? { color: 'blue', weight: 2, fillColor: 'blue', fillOpacity: 1 }
-      : { color: '#ccc', weight: 0.5, fillColor: '#eee', fillOpacity: 1 }; // neutral style
+      ? HIGHLIGHT_STYLE
+      : REGULAR_STYLE
   };
 
   const onEachFeature = (feature: any, layer: any) => {

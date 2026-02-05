@@ -1,10 +1,10 @@
-import { ActionIcon, Autocomplete, Box, Flex, Group, Text, Title } from '@mantine/core';
-import classes from './Welcome.module.css';
+import { Group } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import CountryMap from '../CountryMap';
-import { IconArrowRight, IconCheck, IconCircleArrowRight, IconCircleArrowRightFilled, IconX } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { CountryInput } from '../CountryInput';
 import { notifications } from '@mantine/notifications';
+import { Feature } from 'geojson';
 
 const DATA_URL = '/data/countries_simplified.geojson'
 
@@ -19,8 +19,6 @@ const DATA_URL = '/data/countries_simplified.geojson'
  *  - color mode
  *  - fix lint errors
  */
-
-
 
 export function Welcome() {
 
@@ -48,13 +46,16 @@ export function Welcome() {
   useEffect(() => {
     fetch(DATA_URL)
       .then(r => {
-        if (!r.ok) throw new Error(r.statusText);
+        if (!r.ok) {
+          throw new Error(r.statusText);
+        }
         return r.json();
       })
       .then(data => {
         setGeojson(data)
 
-        const countries = data.features.map((c: unknown) => c.properties.NAME)
+        const countries = data.features
+          .map((f: Feature) => f.properties?.NAME)
           .sort()
 
         setALL_COUNTRIES(countries)
@@ -79,7 +80,9 @@ export function Welcome() {
 
     const correct = selectedCountry === country
 
-    if (correct) setTotalCorrect(totalCorrect + 1)
+    if (correct) {
+      setTotalCorrect(totalCorrect + 1)
+    }
 
     notifications.show({
       position: 'top-center',
