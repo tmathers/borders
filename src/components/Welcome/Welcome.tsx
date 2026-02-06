@@ -18,13 +18,14 @@ export const LAYOUT_SPACING = "md"
  *  - fix lint errors
  *  - show full names
  *  - make popout
+ *  - make PWA
  */
 
 export function Welcome() {
 
   const [country, setCountry] = useState<string | null>(null)
   const [geoJson, setGeojson] = useState<FeatureCollection>()
-  const [ALL_COUNTRIES, setALL_COUNTRIES] = useState([])
+  const [ALL_COUNTRIES, setALL_COUNTRIES] = useState<string[]>([])
   const [unusedCountries, setUnusedCountries] = useState<Set<string>>(new Set())
   const [totalCorrect, setTotalCorrect] = useState(0)
 
@@ -107,7 +108,7 @@ export function Welcome() {
         </Flex>
       </Card>
       
-      <Group h="100%" w="100%" id="map">
+      <Group w="100%">
         {country && 
           <CountryMap country={country} geoJson={geoJson} />
         }

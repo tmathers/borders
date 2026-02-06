@@ -1,68 +1,161 @@
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
-import type { Feature, FeatureCollection } from 'geojson'
+import React, { useEffect, useRef } from 'react';
+import type { FeatureCollection } from 'geojson'
 import { HEADER_HEIGHT } from './Header';
+import maplibregl from 'maplibre-gl';
+import { Box } from '@mantine/core';
 
 interface CountryMapProps {
   country: string;
   geoJson?: FeatureCollection;
 }
 
-const HIGHLIGHT_STYLE = { color: 'blue', weight: 3, fillColor: 'blue', fillOpacity: 1 }
-const REGULAR_STYLE = { color: '#ccc', weight: 1, fillColor: '#eee', fillOpacity: 1 }
 
-const BOUNDING_BOX_PADDING = 100
+const STYLE_URL = 'https://demotiles.maplibre.org/globe.json'
 
-const MAP_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+const HIGHLIGHT_COLOR = 'rgb(28, 126, 214)'
 
 const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
 
-  const styleFn = (feature: any) => {
-    return feature?.properties?.NAME === country
-      ? HIGHLIGHT_STYLE
-      : REGULAR_STYLE
-  };
+    const mapContainer = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<maplibregl.Map | null>(null)
 
-  const onEachFeature = (feature: Feature, layer: any) => {
-    if (feature?.properties?.NAME !== country) {
-      layer.remove(); // optional: remove other countries entirely
+  useEffect(() => {
+    if (mapRef.current) { return } // already initialized
+
+    mapRef.current = new maplibregl.Map({
+      container: 'map', // container id
+      style: STYLE_URL,
+      center: [0, 0], // starting position [lng, lat]
+      zoom: 1 // starting zoom
+      
+    })
+
+    const map = mapRef.current
+    map.addControl(new maplibregl.NavigationControl())    
+    
+    // Wait until style is fully loaded
+    map.on('style.load', () => {
+      highlightCountry(mapRef.current!, country)
+    })
+
+    map.on('style.load', () => {
+      const layers = map.getStyle().layers
+
+      layers?.forEach(layer => {
+        if (layer.type === 'symbol') {
+          map.setLayoutProperty(layer.id, 'visibility', 'none')
+        }
+      })
+    })
+    
+  }, [geoJson])
+
+  useEffect(() => {
+
+    if (!mapRef.current) { return }
+    const map = mapRef.current
+
+    if (map.isStyleLoaded()) {
+      highlightCountry(map, country)
     } else {
-      layer.bindPopup(feature.properties.NAME || feature.properties.NAME_LONG || country);
+      map.once('style.load', () => highlightCountry(map, country))
     }
-  };
 
-  // Functional component bc useMap needs to be within MapContainer
-  function FitToFeature() {
-    const map = useMap()
-    useEffect(() => {
-      if (!geoJson) {
-        return
+  }, [country])
+
+  function highlightCountry(map: maplibregl.Map, countryName: string) {
+    // Remove existing highlighN.tot layer/source if present
+
+    if (map.getLayer('country-outline')) { map.removeLayer('country-outline') }
+    if (map.getSource('country-outline')) { map.removeSource('country-outline') }
+
+    if (map.getLayer('country-fill')) { map.removeLayer('country-fill') }
+    if (map.getSource('country-fill')) { map.removeSource('country-fill') }
+
+
+    const countryFeature = geoJson?.features.find(
+      (f: any) => f.properties.NAME.toLowerCase() === countryName.toLowerCase()
+    )
+
+    if (!countryFeature) {
+      // eslint-disable-next-line no-console
+      console.warn(`Country "${countryName}" not found`)
+      return
+    }
+
+    map.addSource('country-outline', {
+      type: 'geojson',
+      data: countryFeature
+    })
+
+    map.addLayer({
+      id: 'country-outline',
+      type: 'line',
+      source: 'country-outline',
+      paint: {
+        'line-color': HIGHLIGHT_COLOR,
+        'line-width': 5,
+
       }
+    })
 
-      const feature = geoJson.features.find((f: Feature) => f.properties?.NAME === country)
-      const layer = (window as any).L.geoJSON(feature)
-      const bounds = layer.getBounds()
+    map.addSource('country-fill', {
+      type: 'geojson',
+      data: countryFeature
+    })
 
-      if (bounds.isValid()) {
-        map.fitBounds(bounds, { padding: [BOUNDING_BOX_PADDING, BOUNDING_BOX_PADDING] })
+    map.addLayer({
+      id: 'country-fill',
+      type: 'fill',
+      source: 'country-fill',
+      paint: {
+        'fill-color': HIGHLIGHT_COLOR,
+        'fill-opacity': 0.5,
       }
+    })
 
-    }, [geoJson, map, country]);
-    return null
+    const [minLng, minLat, maxLng, maxLat] = countryFeature.bbox
+      ? countryFeature.bbox
+      : getFeatureBounds(countryFeature)
+
+    map.fitBounds(
+      [
+        [minLng, minLat],
+        [maxLng, maxLat]
+      ],
+      { padding: 40 }
+    )
+  }
+
+  // Helper: compute bbox if not present
+  function getFeatureBounds(feature: any) {
+    const coords: [number, number][] = []
+
+    const extractCoords = (geom: any) => {
+      if (geom.type === 'Polygon') {
+        geom.coordinates.forEach((ring: any) => ring.forEach((c: any) => coords.push(c)))
+      } else if (geom.type === 'MultiPolygon') {
+        geom.coordinates.forEach((poly: any) =>
+          poly.forEach((ring: any) => ring.forEach((c: any) => coords.push(c)))
+        )
+      }
+    }
+
+    extractCoords(feature.geometry)
+    const lons = coords.map(c => c[0])
+    const lats = coords.map(c => c[1])
+    return [Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)]
   }
 
 
   return (
-    <MapContainer 
-      zoom={2} 
-      style={{ height: `${window.innerHeight - HEADER_HEIGHT}px`, width: '100%' }}
-    >
-      <TileLayer url={MAP_URL} />
-      {geoJson &&
-        <GeoJSON data={geoJson} style={styleFn} onEachFeature={onEachFeature} />
-      }
-      <FitToFeature />
-    </MapContainer>
+
+    <Box 
+      ref={mapContainer}
+      id="map"
+      style={{ height: `${window.innerHeight - HEADER_HEIGHT}px`, width: '100%' }} 
+          
+    />
   );
 };
 
