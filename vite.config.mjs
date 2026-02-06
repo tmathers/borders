@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, 'src') // <-- important
       }
-    }
+    },
+    base: '/borders/',  // important for GH Pages
   }
 })
