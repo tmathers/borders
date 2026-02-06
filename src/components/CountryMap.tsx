@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
-import type { Feature, Geometry } from 'geojson'
+import type { Feature, FeatureCollection } from 'geojson'
+import { HEADER_HEIGHT } from './Header';
 
 interface CountryMapProps {
   country: string;
-  geoJson?: Geometry;
+  geoJson?: FeatureCollection;
 }
 
 const HIGHLIGHT_STYLE = { color: 'blue', weight: 3, fillColor: 'blue', fillOpacity: 1 }
@@ -52,7 +53,10 @@ const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
 
 
   return (
-    <MapContainer zoom={2} style={{ height: '800px', width: '100%' }}>
+    <MapContainer 
+      zoom={2} 
+      style={{ height: `${window.innerHeight - HEADER_HEIGHT}px`, width: '100%' }}
+    >
       <TileLayer url={MAP_URL} />
       {geoJson &&
         <GeoJSON data={geoJson} style={styleFn} onEachFeature={onEachFeature} />

@@ -1,6 +1,7 @@
 import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useState } from 'react';
+import { LAYOUT_SPACING } from './Welcome/Welcome';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 
@@ -19,10 +20,11 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
       pos="absolute"
       bottom={0}
       w="100%"
+      h={INPUT_HEIGHT}
       justify="center"
       align="flex-end"
       gap="xs"
-      mb="xl"
+      mb={LAYOUT_SPACING}
     >
 
       <Autocomplete

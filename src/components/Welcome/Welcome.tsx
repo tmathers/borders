@@ -1,12 +1,14 @@
 import { Card, Flex, Group, Text, ThemeIcon } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import CountryMap from '../CountryMap';
-import { IconCheck, IconCircleCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import { CountryInput } from '../CountryInput';
 import { notifications } from '@mantine/notifications';
-import { Feature, Geometry } from 'geojson';
+import { Feature, FeatureCollection } from 'geojson';
 
 const DATA_URL = '/data/countries.geojson'
+
+export const LAYOUT_SPACING = "md"
 
 
 /**
@@ -14,13 +16,14 @@ const DATA_URL = '/data/countries.geojson'
  *  - use other map option to hide labels
  *  - end game state
  *  - fix lint errors
- *  - map height
+ *  - show full names
+ *  - make popout
  */
 
 export function Welcome() {
 
   const [country, setCountry] = useState<string | null>(null)
-  const [geoJson, setGeojson] = useState<Geometry>()
+  const [geoJson, setGeojson] = useState<FeatureCollection>()
   const [ALL_COUNTRIES, setALL_COUNTRIES] = useState([])
   const [unusedCountries, setUnusedCountries] = useState<Set<string>>(new Set())
   const [totalCorrect, setTotalCorrect] = useState(0)
@@ -89,7 +92,7 @@ export function Welcome() {
       <Card 
         pos="absolute" 
         right={0}
-        m="lg"
+        m={LAYOUT_SPACING}
         p="sm" 
         style={{ zIndex: 999 }}
         withBorder
@@ -98,8 +101,8 @@ export function Welcome() {
         <Flex  gap="xs">
 
           <Text size="lg" mb={0}>{totalCorrect} / {totalAsked}</Text>
-          <ThemeIcon variant="white" color="green">
-            <IconCircleCheck />
+          <ThemeIcon color="green" radius="lg" size="sm" aria-label="correct">
+            <IconCheck style={{ width: '70%', height: '70%' }} />
           </ThemeIcon>
         </Flex>
       </Card>
