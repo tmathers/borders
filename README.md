@@ -1,4 +1,20 @@
-# Mantine Vite template
+# Country Guesser
+
+## Geo Data Notes
+Country data is in `/data`, downloaded from (Natural Earth Data)[https://www.naturalearthdata.com/downloads/10m-cultural-vectors/].
+
+Simplified version created using:
+```
+ogr2ogr -f GeoJSON countries_simplified.geojson countries.geojson -simplify 0.1
+```
+where `0.1` equals 10km, AKA the resolution of the polygon features. 
+
+`ogr2ogr` installed using:
+```https://react-leaflet.js.org/
+sudo apt install -y gdal-bin libgdal-dev
+```
+## Leaflet Docs
+https://react-leaflet.js.org/
 
 ## Features
 

@@ -1,6 +1,6 @@
 import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
-import { ChangeEvent, KeyboardEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 

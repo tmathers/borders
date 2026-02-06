@@ -1,6 +1,6 @@
-import React from 'react';
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import type { Geometry } from 'geojson'
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import type { Feature, Geometry } from 'geojson'
 
 interface CountryMapProps {
   country: string;
@@ -9,6 +9,8 @@ interface CountryMapProps {
 
 const HIGHLIGHT_STYLE = { color: 'blue', weight: 3, fillColor: 'blue', fillOpacity: 1 }
 const REGULAR_STYLE = { color: '#ccc', weight: 1, fillColor: '#eee', fillOpacity: 1 }
+
+const BOUNDING_BOX_PADDING = 100
 
 const MAP_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -20,7 +22,7 @@ const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
       : REGULAR_STYLE
   };
 
-  const onEachFeature = (feature: any, layer: any) => {
+  const onEachFeature = (feature: Feature, layer: any) => {
     if (feature?.properties?.NAME !== country) {
       layer.remove(); // optional: remove other countries entirely
     } else {
@@ -28,12 +30,34 @@ const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
     }
   };
 
+  // Functional component bc useMap needs to be within MapContainer
+  function FitToFeature() {
+    const map = useMap()
+    useEffect(() => {
+      if (!geoJson) {
+        return
+      }
+
+      const feature = geoJson.features.find((f: Feature) => f.properties?.NAME === country)
+      const layer = (window as any).L.geoJSON(feature)
+      const bounds = layer.getBounds()
+
+      if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [BOUNDING_BOX_PADDING, BOUNDING_BOX_PADDING] })
+      }
+
+    }, [geoJson, map, country]);
+    return null
+  }
+
+
   return (
-    <MapContainer center={[20,0]} zoom={2} style={{ height: '600px', width: '100%' }}>
+    <MapContainer zoom={2} style={{ height: '800px', width: '100%' }}>
       <TileLayer url={MAP_URL} />
       {geoJson &&
         <GeoJSON data={geoJson} style={styleFn} onEachFeature={onEachFeature} />
       }
+      <FitToFeature />
     </MapContainer>
   );
 };

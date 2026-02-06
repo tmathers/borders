@@ -1,38 +1,31 @@
-import { Card, Group, Text } from '@mantine/core';
+import { Card, Flex, Group, Text, ThemeIcon } from '@mantine/core';
 import { useEffect, useMemo, useState } from 'react';
 import CountryMap from '../CountryMap';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconCircleCheck, IconX } from '@tabler/icons-react';
 import { CountryInput } from '../CountryInput';
 import { notifications } from '@mantine/notifications';
-import { Feature } from 'geojson';
+import { Feature, Geometry } from 'geojson';
 
-const DATA_URL = '/data/countries_simplified.geojson'
+const DATA_URL = '/data/countries.geojson'
 
 
 /**
  * TODO:
  *  - use other map option to hide labels
  *  - end game state
- *  - center on country
- *  - header
- *  - color mode
  *  - fix lint errors
+ *  - map height
  */
 
 export function Welcome() {
 
   const [country, setCountry] = useState<string | null>(null)
-
-  const [geoJson, setGeojson] = useState()
-
+  const [geoJson, setGeojson] = useState<Geometry>()
   const [ALL_COUNTRIES, setALL_COUNTRIES] = useState([])
-
   const [unusedCountries, setUnusedCountries] = useState<Set<string>>(new Set())
-
   const [totalCorrect, setTotalCorrect] = useState(0)
 
   const totalAsked = useMemo(() => ALL_COUNTRIES.length - unusedCountries.size, [ALL_COUNTRIES, unusedCountries])
-
 
 
   const pickCountry = (countries: Set<string>) => {
@@ -63,6 +56,7 @@ export function Welcome() {
         setUnusedCountries(set)
 
       })
+      // eslint-disable-next-line no-console
       .catch(e => console.error('load error', e));
 
   }, [DATA_URL]);
@@ -98,9 +92,16 @@ export function Welcome() {
         m="lg"
         p="sm" 
         style={{ zIndex: 999 }}
-        withBorder  
+        withBorder
+        
       >
-        <Text size="lg">{totalCorrect} / {totalAsked}</Text>
+        <Flex  gap="xs">
+
+          <Text size="lg" mb={0}>{totalCorrect} / {totalAsked}</Text>
+          <ThemeIcon variant="white" color="green">
+            <IconCircleCheck />
+          </ThemeIcon>
+        </Flex>
       </Card>
       
       <Group h="100%" w="100%" id="map">
