@@ -13,8 +13,8 @@ where `0.1` equals 10km, AKA the resolution of the polygon features.
 ```https://react-leaflet.js.org/
 sudo apt install -y gdal-bin libgdal-dev
 ```
-## Leaflet Docs
-https://react-leaflet.js.org/
+## MapLibre Docs
+https://maplibre.org/maplibre-gl-js/docs/
 
 ## Features
 

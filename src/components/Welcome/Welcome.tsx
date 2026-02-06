@@ -16,6 +16,9 @@ export const LAYOUT_SPACING = "md"
  *  - end game state
  *  - show full names
  *  - make PWA
+ *  - store style json in data folder
+ *  - add settings
+ *  - add info
  */
 
 export function Welcome() {
@@ -91,14 +94,15 @@ export function Welcome() {
         pos="absolute" 
         right={0}
         m={LAYOUT_SPACING}
-        p="sm" 
-        style={{ zIndex: 999 }}
+        p="xs"
+        py={5}
+        style={{ zIndex: 99 }}
         withBorder
       >
-        <Flex gap="xs">
+        <Flex gap="xs" align="center">
 
-          <Text size="lg" mb={0}>{totalCorrect} / {totalAsked}</Text>
-          <ThemeIcon color="green" radius="lg" size="sm" aria-label="correct">
+          <Text  truncate lh='sm' size="lg" m={0}>{totalCorrect} / {totalAsked}</Text>
+          <ThemeIcon color="green" radius="lg" size="xs" aria-label="correct">
             <IconCheck style={{ width: '70%', height: '70%' }} />
           </ThemeIcon>
         </Flex>

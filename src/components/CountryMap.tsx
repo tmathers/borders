@@ -16,7 +16,7 @@ const HIGHLIGHT_COLOR = 'rgb(28, 126, 214)'
 
 const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
 
-    const mapContainer = useRef<HTMLDivElement>(null)
+  const mapContainer = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
 
   useEffect(() => {
@@ -31,14 +31,11 @@ const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson }) => {
     })
 
     const map = mapRef.current
-    map.addControl(new maplibregl.NavigationControl())    
     
     // Wait until style is fully loaded
     map.on('style.load', () => {
       highlightCountry(mapRef.current!, country)
-    })
 
-    map.on('style.load', () => {
       const layers = map.getStyle().layers
 
       layers?.forEach(layer => {
