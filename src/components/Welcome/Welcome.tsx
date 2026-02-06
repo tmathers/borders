@@ -19,6 +19,7 @@ export const LAYOUT_SPACING = "md"
  *  - store style json in data folder
  *  - add settings
  *  - add info
+ *  - add map controls
  */
 
 export function Welcome() {

@@ -24,7 +24,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
       justify="center"
       align="flex-end"
       gap="xs"
-      mb={LAYOUT_SPACING}
+      m={LAYOUT_SPACING}
     >
 
       <Autocomplete
