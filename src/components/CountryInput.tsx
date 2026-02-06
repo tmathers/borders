@@ -28,7 +28,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
     >
 
       <Autocomplete
-        styles={{ dropdown: { zIndex: 999 } }}
+        styles={{ dropdown: { zIndex: 999, opacity: '80%' } }}
         placeholder="Enter country"
         aria-label="Enter country"
         data={ALL_COUNTRIES}

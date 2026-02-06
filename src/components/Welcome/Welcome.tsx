@@ -13,11 +13,8 @@ export const LAYOUT_SPACING = "md"
 
 /**
  * TODO:
- *  - use other map option to hide labels
  *  - end game state
- *  - fix lint errors
  *  - show full names
- *  - make popout
  *  - make PWA
  */
 
@@ -97,9 +94,8 @@ export function Welcome() {
         p="sm" 
         style={{ zIndex: 999 }}
         withBorder
-        
       >
-        <Flex  gap="xs">
+        <Flex gap="xs">
 
           <Text size="lg" mb={0}>{totalCorrect} / {totalAsked}</Text>
           <ThemeIcon color="green" radius="lg" size="sm" aria-label="correct">
