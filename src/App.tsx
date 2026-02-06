@@ -6,14 +6,17 @@ import { MantineProvider } from '@mantine/core';
 import { Router } from './Router';
 import { theme } from './theme';
 import { Notifications } from '@mantine/notifications';
+import { useEffect } from 'react';
 
 export default function App() {
 
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('src/sw.js')
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e: any) => {
+      e.preventDefault()
+      console.log('PWA install prompt available')
+      // you can later call e.prompt() to show it
     })
-  }
+  }, [])
 
 
   return (

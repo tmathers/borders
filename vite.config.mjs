@@ -15,17 +15,17 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
-        theme_color: '#000000',
+        theme_color: '#1c7ed6',
         icons: [
           {
-            src: '/icon-192.png',
+            src: '/favicon.svg',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/svg'
           },
           {
-            src: '/icon-512.png',
+            src: '/favicon.svg',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/svg'
           }
         ]
       }
