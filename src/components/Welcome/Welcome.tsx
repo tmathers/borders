@@ -6,7 +6,7 @@ import { CountryInput } from '../CountryInput';
 import { notifications } from '@mantine/notifications';
 import { Feature, FeatureCollection } from 'geojson';
 
-const DATA_URL = '/data/countries.geojson'
+const DATA_URL = './data/countries.geojson'
 
 export const LAYOUT_SPACING = "md"
 
