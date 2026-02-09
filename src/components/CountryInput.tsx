@@ -1,4 +1,4 @@
-import { ActionIcon, Autocomplete, Box, Flex } from '@mantine/core';
+import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useState } from 'react';
 import { LAYOUT_SPACING } from './Welcome/Welcome';
