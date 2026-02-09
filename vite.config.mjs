@@ -41,6 +41,6 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src') // <-- important
       }
     },
-    base: '/',  // important for GH Pages
+    base: '/borders',  // important for GH Pages
   }
 })
