@@ -20,6 +20,7 @@ export const LAYOUT_SPACING = "md"
  *  - add settings
  *  - add info
  *  - add map controls
+ *  - input height
  */
 
 export function Welcome() {
