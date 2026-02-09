@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
           short_name: env.VITE_APP_NAME,
           start_url: '/',
           display: '/standalone',
-          background_color: '#ffffff',
+          background_color: '#242424',
           icons: [
             {
               src: './favicon.svg',
