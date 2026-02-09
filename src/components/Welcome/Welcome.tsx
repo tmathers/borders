@@ -84,6 +84,7 @@ export function Welcome() {
       message: <>The country was <b>{country}</b>.</>,
       color: correct ? 'green' : 'red',
       icon: correct ? <IconCheck /> : <IconX />,
+      className: 'notification'
     });
 
     pickCountry(unusedCountries)
