@@ -1,4 +1,4 @@
-import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
+import { ActionIcon, Autocomplete, Box, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useState } from 'react';
 import { LAYOUT_SPACING } from './Welcome/Welcome';
@@ -15,15 +15,15 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
   const [value, setValue] = useState('')
 
   return (
+    <Box w="100%">
     <Flex 
       style={{ zIndex: 999 }}
       pos="absolute"
       bottom={0}
-      w="100%"
       h={INPUT_HEIGHT}
       justify="center"
       align="flex-end"
-      gap="xs"
+      flex={2}
       m={LAYOUT_SPACING}
     >
 
@@ -64,5 +64,6 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
       </ActionIcon>
 
     </Flex>
+    </Box>
   );
 }

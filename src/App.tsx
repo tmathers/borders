@@ -3,10 +3,10 @@ import '@mantine/notifications/styles.css';
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 import { MantineProvider } from '@mantine/core';
-import { Router } from './Router';
 import { theme } from './theme';
 import { Notifications } from '@mantine/notifications';
 import { useEffect } from 'react';
+import { HomePage } from './pages/Home.page';
 
 export default function App() {
 
@@ -22,7 +22,7 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <Notifications />
-      <Router />
+      <HomePage />
     </MantineProvider>
   );
 }
