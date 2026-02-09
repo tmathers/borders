@@ -18,12 +18,12 @@ export default defineConfig(({ mode }) => {
           background_color: '#ffffff',
           icons: [
             {
-              src: '/pwa-192x192.png',
+              src: '/favicon.svg',
               sizes: '192x192',
               type: 'image/png'
             },
             {
-              src: '/pwa-512x512.png',
+              src: '/favicon.svg',
               sizes: '512x512',
               type: 'image/png'
             }
@@ -41,6 +41,6 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src') // <-- important
       }
     },
-    base: '/borders/',  // important for GH Pages
+    base: '/',  // important for GH Pages
   }
 })

@@ -13,8 +13,8 @@ export default function App() {
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e: any) => {
       e.preventDefault()
+      // eslint-disable-next-line no-console
       console.log('PWA install prompt available')
-      // you can later call e.prompt() to show it
     })
   }, [])
 
