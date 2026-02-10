@@ -21,6 +21,7 @@ export const LAYOUT_SPACING = "md"
  *  - add info
  *  - add map controls
  *  - input height
+ *  - fix mobile scroll
  */
 
 export function Welcome() {
