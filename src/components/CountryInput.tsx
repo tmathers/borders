@@ -1,7 +1,7 @@
+import { LAYOUT_SPACING } from '@/pages/Home.page';
 import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
-import { LAYOUT_SPACING } from './Welcome/Welcome';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 

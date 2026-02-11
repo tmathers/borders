@@ -1,6 +1,6 @@
 import { FeatureCollection } from "geojson"
 
-export const HIGHLIGHT_COLOR = 'rgb(28, 126, 214)'
+export const HIGHLIGHT_COLOR = '#1c7ed6ff'
 
 // compute bounding box
 export function getFeatureBounds(feature: any) {

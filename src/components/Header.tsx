@@ -1,8 +1,8 @@
-import { ActionIcon, Box, Flex, Modal, Stack, Text, Title } from '@mantine/core';
-import { ColorSchemeToggle } from './ColorSchemeToggle/ColorSchemeToggle';
-import { LAYOUT_SPACING } from './Welcome/Welcome';
-import { IconInfoCircle, IconSettings } from '@tabler/icons-react';
+import { ActionIcon, Box, Flex, Menu, Modal, Stack, Text, Title } from '@mantine/core';
+import { ColorSchemeToggle } from './ColorSchemeToggle';
+import { IconInfoCircle, IconRefresh, IconSettings } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
+import { LAYOUT_SPACING } from '@/pages/Home.page';
 
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
@@ -30,6 +30,27 @@ export function Header() {
 
           <Flex gap="xs">
 
+            <Menu shadow="md" position="bottom-end">
+              <Menu.Target>
+                <ActionIcon
+                  onClick={() => {}}
+                  variant={ICON_VARIANT}
+                  size="md"
+                  aria-label="Toggle color scheme"
+                >
+                  <IconSettings                 
+                    stroke={ICON_STROKE}
+                    style={{ width: ICON_SIZE, height: ICON_SIZE }} 
+                  />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item leftSection={<IconRefresh size={14} />}>
+                  Restart
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+
             <ActionIcon
               onClick={() => openInfo()}
               variant={ICON_VARIANT}
@@ -47,18 +68,6 @@ export function Header() {
               style={{ width: ICON_SIZE, height: ICON_SIZE }} 
               variant={ICON_VARIANT}
             />
-
-            <ActionIcon
-              onClick={() => {}}
-              variant={ICON_VARIANT}
-              size="md"
-              aria-label="Toggle color scheme"
-            >
-              <IconSettings                 
-                stroke={ICON_STROKE}
-                style={{ width: ICON_SIZE, height: ICON_SIZE }} 
-              />
-            </ActionIcon>
 
           </Flex>
         </Flex>
