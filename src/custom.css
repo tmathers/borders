@@ -7,3 +7,7 @@ body {
 .notification {
   margin-top: 50px; /* equal to header */
 }
+
+.maplibregl-control-container {
+  display: none;
+}
