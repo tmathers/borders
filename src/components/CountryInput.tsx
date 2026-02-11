@@ -15,9 +15,11 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
   const [value, setValue] = useState('')
 
   const entryIsValid = useMemo(() => {
+    
+    
     return ALL_COUNTRIES
       .map(c => c.toLocaleLowerCase())
-      .includes(value.trim())
+      .includes(value.toLocaleLowerCase().trim())
   }, [value])
 
   return (

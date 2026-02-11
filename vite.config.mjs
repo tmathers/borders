@@ -14,23 +14,18 @@ export default defineConfig(({ mode }) => {
           name: env.VITE_APP_NAME,
           short_name: env.VITE_APP_NAME,
           start_url: '/',
-          display: '/standalone',
+          display: 'standalone',
           background_color: '#242424',
+          theme_color: '#1c7ed6ff',
           icons: [
             {
               src: './favicon.svg',
-              sizes: '192x192',
-              type: 'image/png'
+              sizes: 'any',
+              type: 'image/svg+xml',
             },
-            {
-              src: './favicon.svg',
-              sizes: '512x512',
-              type: 'image/png'
-            }
           ]
         },
         workbox: {
-          // you could also use env vars here
           navigateFallback: '/',
         }
       }),
