@@ -72,7 +72,8 @@ export function Header() {
               
             <Text>Country data sourced 
               from <a href="https://www.naturalearthdata.com">Natural Earth Data</a> and 
-              rendered using <a href="https://maplibre.org/">MapLibre</a>.
+              rendered using <a href="https://maplibre.org/">MapLibre</a>. The country set is 
+              based on de facto, rather than de jure boundaries.
             </Text>
             <Text c="dimmed" size="sm">&copy; Tara Mathers, {new Date().getFullYear()}.</Text>
           </Stack>

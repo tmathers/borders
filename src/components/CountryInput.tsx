@@ -1,6 +1,6 @@
 import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LAYOUT_SPACING } from './Welcome/Welcome';
 
 interface CountryInputProps {
@@ -13,6 +13,12 @@ const INPUT_HEIGHT = 34
 export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
 
   const [value, setValue] = useState('')
+
+  const entryIsValid = useMemo(() => {
+    return ALL_COUNTRIES
+      .map(c => c.toLocaleLowerCase())
+      .includes(value.trim())
+  }, [value])
 
   return (
     <Flex 
@@ -43,7 +49,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
           value={value}
           onChange={v => setValue(v)}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter' && ALL_COUNTRIES.includes(value.trim())) {
+            if (e.key === 'Enter' && entryIsValid) {
               onSubmit(value)
               setValue('')
             }
@@ -53,7 +59,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
         <ActionIcon 
           variant="filled" 
           aria-label="Submit" 
-          disabled={!ALL_COUNTRIES.includes(value)}
+          disabled={!entryIsValid}
           style={{ 
             height: INPUT_HEIGHT + 2, width: INPUT_HEIGHT + 2, // account for input border
           }}

@@ -18,7 +18,6 @@ export const LAYOUT_SPACING = "md"
  *  - make PWA
  *  - add settings
  *  - fix mobile scroll
- *  - case insensitive
  */
 
 export function Welcome() {
@@ -95,7 +94,7 @@ export function Welcome() {
       <Stack 
         pos="absolute" 
         right={0} 
-        gap={LAYOUT_SPACING} 
+        gap="sm" 
         m={LAYOUT_SPACING} 
         style={{ zIndex: 99 }}
         align="end"

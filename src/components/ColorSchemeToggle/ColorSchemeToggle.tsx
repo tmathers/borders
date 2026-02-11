@@ -20,7 +20,6 @@ export function ColorSchemeToggle({ stroke, style, variant }: ColorSchemeToggleP
         onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
         variant={variant}
         size="md"
-        radius="md"
         aria-label="Toggle color scheme"
       >
         {computedColorScheme === 'dark' && <IconSun style={style} stroke={stroke} />}
