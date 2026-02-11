@@ -70,7 +70,7 @@ export function Header() {
           <Stack gap="xs">
             <Text>A game where you guess the country.</Text>
               
-            <Text>Countries sourced 
+            <Text>Country data sourced 
               from <a href="https://www.naturalearthdata.com">Natural Earth Data</a> and 
               rendered using <a href="https://maplibre.org/">MapLibre</a>.
             </Text>

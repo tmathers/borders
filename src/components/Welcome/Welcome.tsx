@@ -1,10 +1,11 @@
-import { Card, Flex, Group, Text, ThemeIcon } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { ActionIcon, Card, Flex, Group, Stack, Text, ThemeIcon } from '@mantine/core';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import CountryMap from '../CountryMap';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconWorldPin, IconX } from '@tabler/icons-react';
 import { CountryInput } from '../CountryInput';
 import { notifications } from '@mantine/notifications';
 import { Feature, FeatureCollection } from 'geojson';
+import { highlightCountry } from '@/util/map';
 
 const DATA_URL = new URL('../../data/countries.geojson', import.meta.url).href
 
@@ -14,11 +15,8 @@ export const LAYOUT_SPACING = "md"
 /**
  * TODO:
  *  - end game state
- *  - show full names
  *  - make PWA
- *  - store style json in data folder
  *  - add settings
- *  - add map controls
  *  - fix mobile scroll
  *  - case insensitive
  */
@@ -30,6 +28,7 @@ export function Welcome() {
   const [ALL_COUNTRIES, setALL_COUNTRIES] = useState<string[]>([])
   const [unusedCountries, setUnusedCountries] = useState<Set<string>>(new Set())
   const [totalCorrect, setTotalCorrect] = useState(0)
+  const mapRef = useRef<maplibregl.Map | null>(null)
 
   const totalAsked = useMemo(() => ALL_COUNTRIES.length - unusedCountries.size, [ALL_COUNTRIES, unusedCountries])
 
@@ -53,8 +52,8 @@ export function Welcome() {
         setGeojson(data)
 
         const countries = data.features
-          .map((f: Feature) => f.properties?.NAME)
-          .sort()
+          .map((f: Feature) => f.properties?.NAME_LONG)
+          .sort((a: string, b: string) => a.localeCompare(b, 'en', { sensitivity: 'variant' }))
 
         setALL_COUNTRIES(countries)
         const set = new Set([...countries])
@@ -93,27 +92,37 @@ export function Welcome() {
 
   return (
     <>
-      <Card 
+      <Stack 
         pos="absolute" 
-        right={0}
-        m={LAYOUT_SPACING}
-        p="xs"
-        py={5}
+        right={0} 
+        gap={LAYOUT_SPACING} 
+        m={LAYOUT_SPACING} 
         style={{ zIndex: 99 }}
-        withBorder
+        align="end"
       >
-        <Flex gap="xs" align="center">
+        <Card
+          p="xs"
+          py={5}
+          withBorder
+        >
+          <Flex gap="xs" align="center">
 
-          <Text  truncate lh='sm' size="lg" m={0}>{totalCorrect} / {totalAsked}</Text>
-          <ThemeIcon color="green" radius="lg" size="xs" aria-label="correct">
-            <IconCheck style={{ width: '70%', height: '70%' }} />
-          </ThemeIcon>
-        </Flex>
-      </Card>
+            <Text  truncate lh='sm' size="lg" m={0}>{totalCorrect} / {totalAsked}</Text>
+            <ThemeIcon color="green" radius="lg" size="xs" aria-label="correct">
+              <IconCheck style={{ width: '70%', height: '70%' }} />
+            </ThemeIcon>
+          </Flex>
+        </Card>
+
+        <ActionIcon size="lg" aria-label="Re-center" me="0" 
+          onClick={() => highlightCountry(geoJson, mapRef.current!, country!)}>
+          <IconWorldPin style={{ width: '70%', height: '70%' }} />
+        </ActionIcon>
+      </Stack>
       
       <Group w="100%">
         {country && 
-          <CountryMap country={country} geoJson={geoJson} />
+          <CountryMap country={country} geoJson={geoJson} mapRef={mapRef} />
         }
       </Group>
 
