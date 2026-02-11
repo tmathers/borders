@@ -87,7 +87,7 @@ export function Header( { restart } : { restart: () => void } ) {
               rendered using <a href="https://maplibre.org/">MapLibre</a>. The country set is 
               based on de facto, rather than de jure boundaries.
             </Text>
-            <Text c="dimmed" size="sm">&copy; Tara Mathers, {new Date().getFullYear()}.</Text>
+            <Text c="dimmed" size="sm" mt="sm">&copy; Tara Mathers, {new Date().getFullYear()}.</Text>
           </Stack>
         </Modal>
     </Box>
