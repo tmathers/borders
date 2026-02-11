@@ -13,7 +13,7 @@ const ICON_STROKE = 1.5
 const ICON_SIZE = '80%'
 const ICON_VARIANT = 'subtle'
 
-export function Header() {
+export function Header( { restart } : { restart: () => void } ) {
 
   const [infoOpened, { open: openInfo, close: closeInfo }] = useDisclosure(false)
 
@@ -36,7 +36,7 @@ export function Header() {
                   onClick={() => {}}
                   variant={ICON_VARIANT}
                   size="md"
-                  aria-label="Toggle color scheme"
+                  aria-label="Settings"
                 >
                   <IconSettings                 
                     stroke={ICON_STROKE}
@@ -44,8 +44,11 @@ export function Header() {
                   />
                 </ActionIcon>
               </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item leftSection={<IconRefresh size={14} />}>
+              <Menu.Dropdown style={{ zIndex: 999 }}>
+                <Menu.Item 
+                  leftSection={<IconRefresh size={14} />}
+                  onClick={() => restart()}
+                >
                   Restart
                 </Menu.Item>
               </Menu.Dropdown>

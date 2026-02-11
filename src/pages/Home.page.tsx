@@ -17,7 +17,6 @@ export const LAYOUT_SPACING = "md"
  * TODO:
  *  - end game state
  *  - make PWA
- *  - add settings
  *  - fix mobile scroll
  */
 
@@ -90,9 +89,16 @@ export function HomePage() {
     setUnusedCountries(new Set<string>([...unusedCountries]))
   }
 
+  const restart = () => {
+    setTotalCorrect(0)
+    const set = new Set([...ALL_COUNTRIES])
+    pickCountry(set)
+    setUnusedCountries(set)
+  }
+
   return (
     <>
-      <Header />
+      <Header restart={restart} />
       <Stack 
         pos="absolute" 
         right={0} 
