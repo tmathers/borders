@@ -1,7 +1,8 @@
-import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
+import { ActionIcon, Autocomplete, Button, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useState } from 'react';
 import { LAYOUT_SPACING } from './Welcome/Welcome';
+import { HEADER_HEIGHT } from './Header';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 
@@ -33,16 +34,16 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
           aria-label="Enter country"
           data={ALL_COUNTRIES}
           maxDropdownHeight={200}
-          h={INPUT_HEIGHT}
           rightSection={<IconX 
-            height={INPUT_HEIGHT / 2} 
-            onClick={() => setValue('')}  
-            cursor="pointer"
-          />}
+              height={INPUT_HEIGHT / 2} 
+              onClick={() => setValue('')}  size="md"
+              cursor="pointer"
+            />
+          }
           value={value}
           onChange={v => setValue(v)}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Enter' && ALL_COUNTRIES.includes(value)) {
+            if (e.key === 'Enter' && ALL_COUNTRIES.includes(value.trim())) {
               onSubmit(value)
               setValue('')
             }
@@ -53,14 +54,17 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
           variant="filled" 
           aria-label="Submit" 
           disabled={!ALL_COUNTRIES.includes(value)}
-          h={INPUT_HEIGHT} 
-          w={INPUT_HEIGHT} 
+          style={{ 
+            height: INPUT_HEIGHT + 2, width: INPUT_HEIGHT + 2, // account for input border
+          }}
           onClick={() => {
             onSubmit(value)
             setValue('')
           }}
+          
         >
           <IconArrowRight style={{ width: '70%', height: '70%' }} stroke={1.5} />
+
         </ActionIcon>
 
       </Flex>
