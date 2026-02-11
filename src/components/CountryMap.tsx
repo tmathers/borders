@@ -10,7 +10,7 @@ interface CountryMapProps {
 }
 
 
-const STYLE_URL = 'https://demotiles.maplibre.org/globe.json'
+const STYLE_URL = new URL('../data/globe.json', import.meta.url).href
 
 const HIGHLIGHT_COLOR = 'rgb(28, 126, 214)'
 

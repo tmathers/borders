@@ -9,6 +9,7 @@ import { Notifications } from '@mantine/notifications';
 import { useEffect } from 'react';
 import { HomePage } from './pages/Home.page';
 
+
 export default function App() {
 
   useEffect(() => {

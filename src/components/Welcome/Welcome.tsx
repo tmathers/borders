@@ -18,11 +18,9 @@ export const LAYOUT_SPACING = "md"
  *  - make PWA
  *  - store style json in data folder
  *  - add settings
- *  - add info
  *  - add map controls
- *  - input height
  *  - fix mobile scroll
- *  - trim input, case insensitive
+ *  - case insensitive
  */
 
 export function Welcome() {

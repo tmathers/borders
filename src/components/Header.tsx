@@ -1,7 +1,8 @@
-import { ActionIcon, Box, Flex, Title } from '@mantine/core';
+import { ActionIcon, Box, Flex, Modal, Stack, Text, Title } from '@mantine/core';
 import { ColorSchemeToggle } from './ColorSchemeToggle/ColorSchemeToggle';
 import { LAYOUT_SPACING } from './Welcome/Welcome';
 import { IconInfoCircle, IconSettings } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 
 
 const APP_NAME = import.meta.env.VITE_APP_NAME
@@ -13,6 +14,8 @@ const ICON_SIZE = '80%'
 const ICON_VARIANT = 'subtle'
 
 export function Header() {
+
+  const [infoOpened, { open: openInfo, close: closeInfo }] = useDisclosure(false)
 
   return (
     <Box 
@@ -28,7 +31,7 @@ export function Header() {
           <Flex gap="xs">
 
             <ActionIcon
-              onClick={() => {}}
+              onClick={() => openInfo()}
               variant={ICON_VARIANT}
               size="md"
               aria-label="Toggle color scheme"
@@ -59,6 +62,21 @@ export function Header() {
 
           </Flex>
         </Flex>
+
+        <Modal opened={infoOpened} onClose={closeInfo} 
+          title={<IconInfoCircle size={24} aria-label="Info" />} 
+          centered
+        >
+          <Stack gap="xs">
+            <Text>A game where you guess the country.</Text>
+              
+            <Text>Countries sourced 
+              from <a href="https://www.naturalearthdata.com">Natural Earth Data</a> and 
+              rendered using <a href="https://maplibre.org/">MapLibre</a>.
+            </Text>
+            <Text c="dimmed" size="sm">&copy; Tara Mathers, {new Date().getFullYear()}.</Text>
+          </Stack>
+        </Modal>
     </Box>
   );
 }

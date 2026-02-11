@@ -1,8 +1,7 @@
-import { ActionIcon, Autocomplete, Button, Flex } from '@mantine/core';
+import { ActionIcon, Autocomplete, Flex } from '@mantine/core';
 import { IconX, IconArrowRight } from '@tabler/icons-react';
 import { useState } from 'react';
 import { LAYOUT_SPACING } from './Welcome/Welcome';
-import { HEADER_HEIGHT } from './Header';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 
@@ -30,6 +29,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
       <Flex w="100%" justify="center" gap="sm">
         <Autocomplete
           styles={{ dropdown: { zIndex: 999, opacity: '80%' } }}
+          h={INPUT_HEIGHT}
           placeholder="Enter country"
           aria-label="Enter country"
           data={ALL_COUNTRIES}
