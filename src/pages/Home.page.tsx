@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Card, Flex, Group, Modal, Stack, Text, ThemeIcon } from '@mantine/core';
+import { ActionIcon, Box, Button, Card, Flex, Group, Modal, Stack, Text, ThemeIcon } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import CountryMap from '../components/CountryMap';
 import { IconCheck, IconConfettiFilled, IconWorldPin, IconX } from '@tabler/icons-react';
@@ -122,41 +122,45 @@ export function HomePage() {
   }
 
   return (
-    <>
-      <Header restart={restart} />
-      <Stack 
-        pos="absolute" 
-        right={0} 
-        gap="sm" 
-        m={LAYOUT_SPACING} 
-        style={{ zIndex: 99 }}
-        align="end"
-      >
-        <Card
-          p="xs"
-          py={5}
-          withBorder
-        >
-          <Flex gap="xs" align="center">
+    <Box id="root">
+      <Flex id="content" direction="column">
+        <Header restart={restart} />
+        <Box  pos="relative">
+          <Stack 
+            pos="absolute" 
+            right={0} 
+            gap="sm" 
+            m={LAYOUT_SPACING} 
+            style={{ zIndex: 99 }}
+            align="end"
+          >
+            <Card
+              p="xs"
+              py={5}
+              withBorder
+            >
+              <Flex gap="xs" align="center">
 
-            <Text  truncate lh='sm' size="lg" m={0}>{totalCorrect} / {totalAsked}</Text>
-            <ThemeIcon color="green" radius="lg" size="xs" aria-label="correct">
-              <IconCheck style={ICON_STYLE} />
-            </ThemeIcon>
-          </Flex>
-        </Card>
+                <Text  truncate lh='sm' size="lg" m={0}>{totalCorrect} / {totalAsked}</Text>
+                <ThemeIcon color="green" radius="lg" size="xs" aria-label="correct">
+                  <IconCheck style={ICON_STYLE} />
+                </ThemeIcon>
+              </Flex>
+            </Card>
 
-        <ActionIcon size="lg" aria-label="Re-center" me="0" 
-          onClick={() => highlightCountry(geoJson, mapRef.current!, country!)}>
-          <IconWorldPin style={ICON_STYLE} />
-        </ActionIcon>
-      </Stack>
-      
-      <Group w="100%">
-        {country && 
-          <CountryMap country={country} geoJson={geoJson} mapRef={mapRef} />
-        }
-      </Group>
+            <ActionIcon size="lg" aria-label="Re-center" me="0" 
+              onClick={() => highlightCountry(geoJson, mapRef.current!, country!)}>
+              <IconWorldPin style={ICON_STYLE} />
+            </ActionIcon>
+          </Stack>
+        </Box>
+        
+        <Group w="100%">
+          {country && 
+            <CountryMap country={country} geoJson={geoJson} mapRef={mapRef} />
+          }
+        </Group>
+      </Flex>
 
       <CountryInput 
         ALL_COUNTRIES={countries.all} 
@@ -182,6 +186,6 @@ export function HomePage() {
         </Stack>
       </Modal>
 
-    </>
+    </Box>
   );
 }

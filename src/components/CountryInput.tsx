@@ -32,6 +32,7 @@ export function CountryInput({ ALL_COUNTRIES, enabled, onSubmit }: CountryInputP
       align="flex-end"
       w="100%"
       my={LAYOUT_SPACING}
+      id="footer"
     >
 
       <Flex w="100%" justify="center" gap="sm">

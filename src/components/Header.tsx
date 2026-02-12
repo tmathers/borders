@@ -23,6 +23,7 @@ export function Header( { restart } : { restart: () => void } ) {
       style={{ borderBottom: '1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))' }}
       py="xs"
       px={LAYOUT_SPACING}
+      id="header"
     >
 
         <Flex justify="space-between" align="center">
@@ -54,23 +55,23 @@ export function Header( { restart } : { restart: () => void } ) {
               </Menu.Dropdown>
             </Menu>
 
+            <ColorSchemeToggle 
+              stroke={ICON_STROKE}
+              style={{ width: ICON_SIZE, height: ICON_SIZE }} 
+              variant={ICON_VARIANT}
+            />
+
             <ActionIcon
               onClick={() => openInfo()}
               variant={ICON_VARIANT}
               size="md"
-              aria-label="Toggle color scheme"
+              aria-label="Info"
             >
               <IconInfoCircle 
                 stroke={ICON_STROKE}
                 style={{ width: ICON_SIZE, height: ICON_SIZE }}
               />
             </ActionIcon>
-
-            <ColorSchemeToggle 
-              stroke={ICON_STROKE}
-              style={{ width: ICON_SIZE, height: ICON_SIZE }} 
-              variant={ICON_VARIANT}
-            />
 
           </Flex>
         </Flex>
