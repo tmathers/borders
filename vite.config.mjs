@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => {
         manifest: {
           name: env.VITE_APP_NAME,
           short_name: env.VITE_APP_NAME,
-          start_url: '/',
-          display: 'standalone',
+          start_url: '/borders',
+          display: 'fullscreen',
           background_color: '#242424',
           theme_color: '#1c7ed6ff',
           icons: [
