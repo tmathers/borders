@@ -5,17 +5,17 @@ import { useMemo, useState } from 'react';
 
 interface CountryInputProps {
   readonly ALL_COUNTRIES: string[], 
-  readonly onSubmit: (v: string) => void
+  readonly onSubmit: (v: string) => void,
+  readonly enabled: boolean,
 }
 
 const INPUT_HEIGHT = 34
 
-export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
+export function CountryInput({ ALL_COUNTRIES, enabled, onSubmit }: CountryInputProps) {
 
   const [value, setValue] = useState('')
 
-  const entryIsValid = useMemo(() => {
-    
+  const entryIsValid = useMemo(() => {  
     
     return ALL_COUNTRIES
       .map(c => c.toLocaleLowerCase())
@@ -61,7 +61,7 @@ export function CountryInput({ ALL_COUNTRIES, onSubmit }: CountryInputProps) {
         <ActionIcon 
           variant="filled" 
           aria-label="Submit" 
-          disabled={!entryIsValid}
+          disabled={!entryIsValid || !enabled}
           style={{ 
             height: INPUT_HEIGHT + 2, width: INPUT_HEIGHT + 2, // account for input border
           }}

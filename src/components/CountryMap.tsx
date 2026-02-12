@@ -27,7 +27,6 @@ const CountryMap: React.FC<CountryMapProps> = ({ country, geoJson, mapRef }) => 
       style: STYLE_URL,
       center: [0, 0], // starting position [lng, lat]
       zoom: 1 // starting zoom
-      
     })
 
     const map = mapRef.current

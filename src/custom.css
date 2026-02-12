@@ -4,8 +4,12 @@ body {
   height: 100vh;
 }
 
+.mantine-Notifications-root {
+  margin-top: calc(50px - var(--mantine-spacing-md)); /* header is 50 */
+}
+
 .notification {
-  margin-top: 50px; /* equal to header */
+  margin-top: var(--mantine-spacing-md)
 }
 
 .maplibregl-control-container {

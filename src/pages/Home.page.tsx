@@ -1,21 +1,23 @@
-import { ActionIcon, Card, Flex, Group, Stack, Text, ThemeIcon } from '@mantine/core';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ActionIcon, Button, Card, Flex, Group, Modal, Stack, Text, ThemeIcon } from '@mantine/core';
+import { useEffect, useRef, useState } from 'react';
 import CountryMap from '../components/CountryMap';
-import { IconCheck, IconWorldPin, IconX } from '@tabler/icons-react';
+import { IconCheck, IconConfettiFilled, IconWorldPin, IconX } from '@tabler/icons-react';
 import { CountryInput } from '../components/CountryInput';
 import { notifications } from '@mantine/notifications';
 import { Feature, FeatureCollection } from 'geojson';
 import { highlightCountry } from '@/util/map';
 import { Header } from '@/components/Header';
+import { useDisclosure } from '@mantine/hooks';
 
 const DATA_URL = new URL('../data/countries.geojson', import.meta.url).href
-
 export const LAYOUT_SPACING = "md"
+const ICON_STYLE = { width: '70%', height: '70%' }
+const PICK_DELAY_MS = 2000
+const NOTIFICATION_DELAY_MS = 5000
 
 
 /**
  * TODO:
- *  - end game state
  *  - make PWA
  *  - fix mobile scroll
  */
@@ -24,19 +26,45 @@ export function HomePage() {
 
   const [country, setCountry] = useState<string | null>(null)
   const [geoJson, setGeojson] = useState<FeatureCollection>()
-  const [ALL_COUNTRIES, setALL_COUNTRIES] = useState<string[]>([])
-  const [unusedCountries, setUnusedCountries] = useState<Set<string>>(new Set())
+  const [countries, setCountries] = useState<{ 
+    all: string[], 
+    unused: string[]
+  }>({ all: [], unused: []})
   const [totalCorrect, setTotalCorrect] = useState(0)
+  const [totalAsked, setTotalAsked] = useState(0)
+  const [inputEnabled, setInputEnabled] = useState(false)
   const mapRef = useRef<maplibregl.Map | null>(null)
+  const [completeModalOpened, { 
+    open: openCompleteModal,
+    close: closeCompleteModal
+  }] = useDisclosure(false)
 
-  const totalAsked = useMemo(() => ALL_COUNTRIES.length - unusedCountries.size, [ALL_COUNTRIES, unusedCountries])
+  useEffect(() => {
+    if (countries.all.length > 0 && totalAsked === countries.all.length) {
+      openCompleteModal()
+      setInputEnabled(false)
+    }
+  }, [totalAsked, countries.all])
+
+  useEffect(() => {
+    setTimeout(() => {
+      pickCountry()
+    }, totalAsked === 0 ? 0 : PICK_DELAY_MS)
+  }, [totalAsked, countries.all.length])
 
 
-  const pickCountry = (countries: Set<string>) => {
-    const idx = Math.floor(Math.random() * countries.size)
-    const pick = [...countries][idx]
+  const pickCountry = () => {
+
+    if (countries.unused.length === 0) { return }
+
+    const idx = Math.floor(Math.random() * countries.unused.length)
+    const pick = countries.unused[idx]
     setCountry(pick)
-    unusedCountries.delete(pick)
+    const set = new Set<string>([...countries.unused])
+    set.delete(pick)
+    setCountries({ all: [...countries.all], unused: Array.from(set) })
+    setInputEnabled(true)
+
   }
 
   useEffect(() => {
@@ -54,10 +82,7 @@ export function HomePage() {
           .map((f: Feature) => f.properties?.NAME_LONG)
           .sort((a: string, b: string) => a.localeCompare(b, 'en', { sensitivity: 'variant' }))
 
-        setALL_COUNTRIES(countries)
-        const set = new Set([...countries])
-        pickCountry(set)
-        setUnusedCountries(set)
+        setCountries({ all: [...countries], unused: [...countries] })
 
       })
       // eslint-disable-next-line no-console
@@ -66,6 +91,9 @@ export function HomePage() {
   }, [DATA_URL]);
 
   const submit = (selectedCountry: string) => {
+
+    setTotalAsked(totalAsked + 1)
+    setInputEnabled(false)
 
     const correct = selectedCountry === country
 
@@ -77,7 +105,7 @@ export function HomePage() {
       position: 'top-center',
       withCloseButton: true,
       withBorder: true,
-      autoClose: 5000,
+      autoClose: NOTIFICATION_DELAY_MS,
       title: <b>{correct ? 'Correct!' : 'Incorrect!'}</b>,
       message: <>The country was <b>{country}</b>.</>,
       color: correct ? 'green' : 'red',
@@ -85,15 +113,12 @@ export function HomePage() {
       className: 'notification'
     });
 
-    pickCountry(unusedCountries)
-    setUnusedCountries(new Set<string>([...unusedCountries]))
   }
 
   const restart = () => {
     setTotalCorrect(0)
-    const set = new Set([...ALL_COUNTRIES])
-    pickCountry(set)
-    setUnusedCountries(set)
+    setTotalAsked(0)
+    setCountries({ all: [...countries.all], unused: [...countries.all] })
   }
 
   return (
@@ -116,14 +141,14 @@ export function HomePage() {
 
             <Text  truncate lh='sm' size="lg" m={0}>{totalCorrect} / {totalAsked}</Text>
             <ThemeIcon color="green" radius="lg" size="xs" aria-label="correct">
-              <IconCheck style={{ width: '70%', height: '70%' }} />
+              <IconCheck style={ICON_STYLE} />
             </ThemeIcon>
           </Flex>
         </Card>
 
         <ActionIcon size="lg" aria-label="Re-center" me="0" 
           onClick={() => highlightCountry(geoJson, mapRef.current!, country!)}>
-          <IconWorldPin style={{ width: '70%', height: '70%' }} />
+          <IconWorldPin style={ICON_STYLE} />
         </ActionIcon>
       </Stack>
       
@@ -133,7 +158,29 @@ export function HomePage() {
         }
       </Group>
 
-      <CountryInput ALL_COUNTRIES={ALL_COUNTRIES} onSubmit={submit} />
+      <CountryInput 
+        ALL_COUNTRIES={countries.all} 
+        onSubmit={submit} 
+        enabled={inputEnabled}
+      />
+
+      <Modal opened={completeModalOpened} onClose={closeCompleteModal} 
+        title={<IconConfettiFilled size={36} aria-label="Finished" />} 
+        centered
+      >
+        <Stack gap="xs">
+          <Text>Congratulations, you got to the end!</Text>
+
+          <Text>You got <b>{totalCorrect} of {totalAsked}</b> correct.</Text>
+
+          <Button onClick={() => {
+            restart()
+            closeCompleteModal()
+          }}>
+            Restart?
+          </Button>
+        </Stack>
+      </Modal>
 
     </>
   );
