@@ -1,1 +1,1 @@
-{"name":"Borders","short_name":"Borders","start_url":"/","display":"standalone","background_color":"#242424","theme_color":"#1c7ed6ff","lang":"en","scope":"/borders/","icons":[{"src":"./favicon.svg","sizes":"any","type":"image/svg+xml"}]}
+{"name":"Borders","short_name":"Borders","start_url":"/borders","display":"fullscreen","background_color":"#242424","theme_color":"#1c7ed6ff","lang":"en","scope":"/borders/","icons":[{"src":"./favicon.svg","sizes":"any","type":"image/svg+xml"}]}
